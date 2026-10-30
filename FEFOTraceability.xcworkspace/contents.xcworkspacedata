@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Workspace
+   version = "1.0">
+   <Group
+      location = "container:"
+      name = "FEFO Traceability">
+      <FileRef
+         location = "group:server/Package.swift">
+      </FileRef>
+      <FileRef
+         location = "group:client/Package.swift">
+      </FileRef>
+   </Group>
+</Workspace>

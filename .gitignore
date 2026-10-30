@@ -1,0 +1,38 @@
+.DS_Store
+
+# Swift build artifacts
+.build/
+.swiftpm/
+DerivedData/
+*.xcuserstate
+xcuserdata/
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*secret*
+*credential*
+
+# macOS application build
+*.app/
+*.dSYM/
+
+# IDE generated files
+*.xcworkspace/xcuserdata/
+*.xcodeproj/xcuserdata/
+
+# Local backups and caches
+backup-before-*/
+cache-backup/
+
+# Temporary and backup files
+*.bak
+*.log
+*.tmp
+
+# Local runtime data
+*.sqlite
+*.sqlite3
