@@ -103,6 +103,7 @@ struct ContentView: View {
                 Text("Аналитическая панель").tag(0)
                 Text("Приоритет FEFO").tag(1)
                 Text("Склад и отчёты").tag(2)
+                Text("Бизнес-аналитика").tag(3)
             }
             .pickerStyle(.segmented)
             .padding(.horizontal)
@@ -125,8 +126,10 @@ struct ContentView: View {
                         dashboard
                     } else if viewModel.selectedTab == 1 {
                         fefoList
-                    } else {
+                    } else if viewModel.selectedTab == 2 {
                         AnalyticsExtrasView(api: api, repository: repository)
+                    } else {
+                        BusinessAnalyticsView(repository: repository)
                     }
                 }
             }

@@ -9,6 +9,7 @@ protocol FEFORepository {
     var movements: [StockMovementItem] { get }
     var isLoading: Bool { get }
     var errorMessage: String? { get }
+    var business: BusinessAnalyticsResponse? { get }
 
     func login(email: String, password: String) async
     func refresh() async

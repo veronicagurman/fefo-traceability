@@ -35,6 +35,10 @@ final class APIRepository: FEFORepository {
     var errorMessage: String? {
         apiService.errorMessage
     }
+    
+    var business: BusinessAnalyticsResponse? {
+        apiService.business
+    }
 
     func login(email: String, password: String) async {
         await apiService.login(email: email, password: password)

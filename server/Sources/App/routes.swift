@@ -167,4 +167,7 @@ func routes(_ app: Application) throws {
         RoleMiddleware(allowedRoles: allRoles)
     )
     analyticsReaders.get("api", "analytics", use: analytics.index)
+    
+    let businessAnalytics = BusinessAnalyticsController()
+    analyticsReaders.get("api", "analytics", "business", use: businessAnalytics.index)
 }

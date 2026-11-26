@@ -86,6 +86,7 @@ final class APIService: ObservableObject {
     @Published var movements: [StockMovementItem] = []
     @Published var isLoading = false
     @Published var errorMessage: String?
+    @Published var business: BusinessAnalyticsResponse?
 
     private let baseURL = URL(string: "http://127.0.0.1:8080/api")!
 
@@ -152,19 +153,23 @@ final class APIService: ObservableObject {
                 get("storage-locations", token: token)
             async let movementsRequest: [StockMovementItem] =
                 get("stock-movements", token: token)
+            async let businessRequest: BusinessAnalyticsResponse =
+                get("analytics/business", token: token)
 
-            let (newAnalytics, newFEFO, newLocations, newMovements) =
+            let (newAnalytics, newFEFO, newLocations, newMovements, newBusiness) =
                 try await (
                     analyticsRequest,
                     fefoRequest,
                     locationsRequest,
-                    movementsRequest
+                    movementsRequest,
+                    businessRequest
                 )
 
             analytics = newAnalytics
             fefo = newFEFO
             locations = newLocations
             movements = newMovements
+            business = newBusiness
         } catch {
             errorMessage = error.localizedDescription
         }
