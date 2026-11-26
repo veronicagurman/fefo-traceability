@@ -42,7 +42,7 @@ struct BusinessAnalyticsView: View {
                     ContentUnavailableView(
                         "Нет данных бизнес-аналитики",
                         systemImage: "chart.xyaxis.line",
-                        description: Text("Обновите данные и проверьте, что сервер запущен.")
+                        description: Text("Не удалось загрузить данные. Попробуйте обновить информацию.")
                     )
                 }
             }
@@ -59,7 +59,7 @@ struct BusinessAnalyticsView: View {
                     .font(.title2.bold())
 
                 if let data = viewModel.data {
-                    Text("Расчёт выполнен на сервере: \(data.generatedAt.formatted(date: .abbreviated, time: .shortened))")
+                    Text("Актуальность данных: \(data.generatedAt.formatted(date: .abbreviated, time: .shortened))")
                         .font(.subheadline)
                         .foregroundStyle(.secondary)
                 }

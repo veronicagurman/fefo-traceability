@@ -4,23 +4,13 @@ import Vapor
 final class Batch: Model, Content, @unchecked Sendable {
     static let schema = "batches"
 
-    @ID(key: .id)
-    var id: UUID?
-
-    @Parent(key: "product_id")
-    var product: Product
-
-    @Field(key: "batch_number")
-    var batchNumber: String
-
-    @Field(key: "quantity")
-    var quantity: Int
-
-    @Field(key: "received_at")
-    var receivedAt: Date
-
-    @Field(key: "expires_at")
-    var expiresAt: Date
+    @ID(key: .id) var id: UUID?
+    @Parent(key: "product_id") var product: Product
+    @Field(key: "batch_number") var batchNumber: String
+    @Field(key: "quantity") var quantity: Int
+    @Field(key: "remaining_quantity") var remainingQuantity: Int
+    @Field(key: "received_at") var receivedAt: Date
+    @Field(key: "expires_at") var expiresAt: Date
 
     init() {}
 
@@ -36,6 +26,7 @@ final class Batch: Model, Content, @unchecked Sendable {
         self.$product.id = productID
         self.batchNumber = batchNumber
         self.quantity = quantity
+        self.remainingQuantity = quantity
         self.receivedAt = receivedAt
         self.expiresAt = expiresAt
     }

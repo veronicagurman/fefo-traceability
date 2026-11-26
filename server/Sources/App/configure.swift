@@ -3,12 +3,18 @@ import FluentPostgresDriver
 import Vapor
 
 func configure(_ app: Application) throws {
-    let databaseUsername = Environment.get("DATABASE_USERNAME") ?? Environment.get("USER") ?? "postgres"
 
+    let databaseUsername = Environment.get("DATABASE_USERNAME") ?? Environment.get("USER") ?? "postgres"
     let databaseHost = Environment.get("DATABASE_HOST") ?? "127.0.0.1"
     let databasePort = Int(Environment.get("DATABASE_PORT") ?? "5432") ?? 5432
     let databasePassword = Environment.get("DATABASE_PASSWORD") ?? ""
     let databaseName = Environment.get("DATABASE_NAME") ?? "fefo_traceability"
+
+    let serverHost = Environment.get("SERVER_HOST") ?? "0.0.0.0"
+    let serverPort = Int(Environment.get("SERVER_PORT") ?? "8080") ?? 8080
+
+    app.http.server.configuration.hostname = serverHost
+    app.http.server.configuration.port = serverPort
 
     app.databases.use(
         .postgres(
@@ -26,6 +32,7 @@ func configure(_ app: Application) throws {
 
     app.migrations.add(CreateProduct())
     app.migrations.add(CreateBatch())
+    app.migrations.add(AddRemainingQuantityToBatch())
     app.migrations.add(CreateAppUser())
     app.migrations.add(CreateAuthToken())
     app.migrations.add(CreateWarehouse())

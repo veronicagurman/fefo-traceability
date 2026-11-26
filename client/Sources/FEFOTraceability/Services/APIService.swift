@@ -88,7 +88,7 @@ final class APIService: ObservableObject {
     @Published var errorMessage: String?
     @Published var business: BusinessAnalyticsResponse?
 
-    private let baseURL = URL(string: "http://127.0.0.1:8080/api")!
+    private let baseURL = URL(string: "http://192.168.10.79:8080/api")!
 
     private var decoder: JSONDecoder {
         let decoder = JSONDecoder()
@@ -221,6 +221,41 @@ final class APIService: ObservableObject {
         await refresh()
     }
 
+    func createShipment(productID: UUID, quantity: Int) async throws {
+        guard let token else {
+            throw APIError.server("Сначала войдите в систему.")
+        }
+
+        guard quantity > 0 else {
+            throw APIError.server("Количество должно быть больше нуля.")
+        }
+
+        let url = baseURL.appendingPathComponent("shipments")
+        var request = URLRequest(url: url)
+        request.httpMethod = "POST"
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpBody = try JSONSerialization.data(withJSONObject: [
+            "productID": productID.uuidString,
+            "quantity": quantity
+        ])
+
+        let (data, response) = try await URLSession.shared.data(for: request)
+
+        guard let http = response as? HTTPURLResponse else {
+            throw APIError.invalidResponse
+        }
+
+        guard (200..<300).contains(http.statusCode) else {
+            let message =
+                (try? JSONSerialization.jsonObject(with: data) as? [String: Any])?["reason"] as? String
+                ?? "Не удалось выполнить отгрузку: HTTP \(http.statusCode)"
+            throw APIError.server(message)
+        }
+
+        await refresh()
+    }
+    
     private func get<T: Decodable>(
         _ path: String,
         token: String

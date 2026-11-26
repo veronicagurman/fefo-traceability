@@ -104,6 +104,7 @@ struct ContentView: View {
                 Text("Приоритет FEFO").tag(1)
                 Text("Склад и отчёты").tag(2)
                 Text("Бизнес-аналитика").tag(3)
+                Text("Отгрузка").tag(4)
             }
             .pickerStyle(.segmented)
             .padding(.horizontal)
@@ -118,7 +119,7 @@ struct ContentView: View {
 
             if api.isLoading && api.analytics == nil {
                 Spacer()
-                ProgressView("Загрузка данных...")
+                ProgressView("Загрузка...")
                 Spacer()
             } else {
                 Group {
@@ -128,8 +129,10 @@ struct ContentView: View {
                         fefoList
                     } else if viewModel.selectedTab == 2 {
                         AnalyticsExtrasView(api: api, repository: repository)
-                    } else {
+                    } else if viewModel.selectedTab == 3 {
                         BusinessAnalyticsView(repository: repository)
+                    } else {
+                        ShipmentView()
                     }
                 }
             }
@@ -165,7 +168,7 @@ struct ContentView: View {
                     ContentUnavailableView(
                         "Нет данных аналитики",
                         systemImage: "chart.bar",
-                        description: Text("Обновите данные или проверьте соединение с сервером.")
+                        description: Text("Не удалось загрузить данные. Проверьте подключение и попробуйте снова.")
                     )
                 }
 
@@ -347,7 +350,7 @@ struct ContentView: View {
                 ContentUnavailableView(
                     "Нет данных FEFO",
                     systemImage: "shippingbox",
-                    description: Text("Обновите данные с сервера.")
+                    description: Text("Обновите данные.")
                 )
             }
         }

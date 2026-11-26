@@ -154,6 +154,11 @@ func routes(_ app: Application) throws {
         "api", "stock-movements",
         use: movements.create
     )
+
+    movementWriters.post(
+        "api", "shipments",
+        use: movements.createShipment
+    )
     
 
     let fefo = FEFOController()

@@ -7,6 +7,11 @@ struct CreateStockMovementRequest: Content {
     let quantity: Int
 }
 
+struct CreateShipmentRequest: Content {
+    let productID: UUID
+    let quantity: Int
+}
+
 struct StockMovementResponse: Content {
     let id: UUID
     let batchID: UUID
@@ -73,6 +78,31 @@ struct StockMovementController {
             movement: movement,
             userEmail: currentUser.email
         )
+
+        return try await response.encodeResponse(status: .created, for: req)
+    }
+
+    func createShipment(req: Request) async throws -> Response {
+        let input = try req.content.decode(CreateShipmentRequest.self)
+
+        guard let currentUser = req.auth.get(AppUser.self),
+              let currentUserID = currentUser.id else {
+            throw Abort(.unauthorized, reason: "Authentication required")
+        }
+
+        let movements = try await service.createShipment(
+            productID: input.productID,
+            quantity: input.quantity,
+            userID: currentUserID,
+            on: req.db
+        )
+
+        let response = try movements.map {
+            try StockMovementResponse(
+                movement: $0,
+                userEmail: currentUser.email
+            )
+        }
 
         return try await response.encodeResponse(status: .created, for: req)
     }

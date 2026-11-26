@@ -89,7 +89,7 @@ struct BusinessAnalyticsService {
         var unplaced = 0
         for batch in batches {
             guard let id = batch.id else { continue }
-            unplaced += max(0, batch.quantity - (placedByBatch[id] ?? 0))
+            unplaced += max(0, batch.remainingQuantity - (placedByBatch[id] ?? 0))
         }
 
         // Ячейки
