@@ -25,19 +25,21 @@ struct AnalyticsExtrasView: View {
                 }
 
                 HStack {
-                    Button {
-                        viewModel.showingMoveSheet = true
-                    } label: {
-                        Label(
-                            "Переместить товар",
-                            systemImage: "arrow.left.arrow.right"
+                    if api.userRole != "sales_manager" {
+                        Button {
+                            viewModel.showingMoveSheet = true
+                        } label: {
+                            Label(
+                                "Переместить товар",
+                                systemImage: "arrow.left.arrow.right"
+                            )
+                        }
+                        .buttonStyle(.borderedProminent)
+                        .disabled(
+                            (api.fefo?.items.isEmpty ?? true)
+                                || api.locations.count < 2
                         )
                     }
-                    .buttonStyle(.borderedProminent)
-                    .disabled(
-                        (api.fefo?.items.isEmpty ?? true)
-                            || api.locations.count < 2
-                    )
 
                     Spacer()
 

@@ -24,6 +24,9 @@ struct ContentView: View {
             }
         }
         .frame(minWidth: 900, minHeight: 680)
+        .onChange(of: api.userRole) { _, _ in
+            viewModel.selectedTab = 0
+        }
     }
 
     private var loginView: some View {
@@ -102,9 +105,16 @@ struct ContentView: View {
             Picker("Раздел", selection: $viewModel.selectedTab) {
                 Text("Аналитическая панель").tag(0)
                 Text("Приоритет FEFO").tag(1)
-                Text("Склад и отчёты").tag(2)
+
+                if api.userRole != "sales_manager" {
+                    Text("Склад и отчёты").tag(2)
+                }
+
                 Text("Бизнес-аналитика").tag(3)
-                Text("Отгрузка").tag(4)
+
+                if api.userRole != "sales_manager" {
+                    Text("Отгрузка").tag(4)
+                }
             }
             .pickerStyle(.segmented)
             .padding(.horizontal)

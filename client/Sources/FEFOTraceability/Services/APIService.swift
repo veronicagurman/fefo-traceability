@@ -2,9 +2,14 @@
 import Foundation
 import Combine
 
+struct AuthenticatedUser: Decodable {
+    let role: String
+}
+
 struct LoginResponse: Decodable {
     let token: String?
     let accessToken: String?
+    let user: AuthenticatedUser?
     var accessTokenValue: String { token ?? accessToken ?? "" }
 }
 
@@ -80,6 +85,7 @@ enum APIError: LocalizedError {
 @MainActor
 final class APIService: ObservableObject {
     @Published var token: String?
+    @Published var userRole: String?
     @Published var analytics: AnalyticsResponse?
     @Published var fefo: FEFOResponse?
     @Published var locations: [LocationItem] = []
@@ -131,6 +137,7 @@ final class APIService: ObservableObject {
             }
 
             token = result.accessTokenValue
+            userRole = result.user?.role
             await refresh()
         } catch {
             errorMessage = error.localizedDescription
